@@ -8,7 +8,7 @@ from torchvision import transforms
 
 class Blood(Dataset):
 
-    def __init__(self, data_path: str, setname:str, transform=None):
+    def __init__(self, setname:str, args, transform=None):
         d = os.path.join(data_path, setname)
         dirs = [os.path.join(d, o) for o in os.listdir(d) if os.path.isdir(os.path.join(d, o))]
 
@@ -63,8 +63,8 @@ class Blood(Dataset):
     
 class SSLBlood(Dataset):
 
-    def __init__(self, data_path: str, setname:str, args):
-        d = os.path.join(data_path, setname)
+    def __init__(self, setname:str, args):
+        d = os.path.join(args.data_path, setname)
         dirs = [os.path.join(d, o) for o in os.listdir(d) if os.path.isdir(os.path.join(d, o))]
 
         data = []
