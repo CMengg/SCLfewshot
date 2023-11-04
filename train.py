@@ -41,7 +41,7 @@ def get_dataset(args):
         print("=> FC100...")
     elif args.dataset == 'blood':
         trainset = SSLBlood('train', args)
-        valset = Blood('train', args)
+        valset = Blood('val', args)
         n_cls = 11
         print("=> Blood...")
     else:
