@@ -291,8 +291,8 @@ if __name__ == '__main__':
     parser.add_argument('--size', type=int, default=84)
     parser.add_argument('--worker', type=int, default=8)
     # few-shot
-    parser.add_argument('--way', type=int, default=5)
-    parser.add_argument('--shot', type=int, default=1)
+    parser.add_argument('--way', type=int, default=2)
+    parser.add_argument('--shot', type=int, default=3)
     parser.add_argument('--query', type=int, default=15)
     parser.add_argument('--test-batch', type=int, default=2000)
     parser.add_argument('--norm', type=str2bool, nargs='?', default=True)
@@ -304,9 +304,9 @@ if __name__ == '__main__':
     for it in iterations:
         args.lr_decay_epochs.append(int(it))
     
-    if args.dataset in ['mini', 'tiered']:
+    if args.dataset in ['mini', 'tiered','blood']:
         args.size = 84
-    elif args.dataset in ['cifarfs','fc100','blood']:
+    elif args.dataset in ['cifarfs','fc100']:
         args.size = 32
         args.worker = 0
     # fix random seed
