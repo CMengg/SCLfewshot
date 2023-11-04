@@ -10,6 +10,7 @@ from datasets.miniimagenet import SSLMiniImageNet, MiniImageNet
 from datasets.tiered_imagenet import SSLTieredImageNet, TieredImageNet
 from datasets.cifarfs import SSLCifarFS, CIFAR_FS
 from datasets.fc100 import SSLFC100, FC100
+from datasets.blood import Blood, SSLBlood
 from resnet import resnet12
 from util import str2bool, set_gpu, ensure_path, save_checkpoint, count_acc, seed_torch, Averager, compute_confidence_interval, normalize, Timer
 from sklearn import metrics
@@ -38,6 +39,11 @@ def get_dataset(args):
         valset = FC100('val', args.size)
         n_cls = 60
         print("=> FC100...")
+    elif args.dataset == 'blood':
+        trainset = SSLBlood('train', args)
+        valset = Blood('train', args)
+        n_cls = 11
+        print("=> Blood...")
     else:
         print("Invalid dataset...")
         exit()
@@ -61,7 +67,7 @@ def main(args):
     # model
     if args.dataset in ['mini', 'tiered']:
         model = resnet12(avg_pool=True, drop_rate=0.1, dropblock_size=5, num_classes=n_cls).cuda()
-    elif args.dataset in ['cifarfs', 'fc100']:
+    elif args.dataset in ['cifarfs', 'fc100', 'blood']:
         model = resnet12(avg_pool=True, drop_rate=0.1, dropblock_size=2, num_classes=n_cls).cuda()
     else:
         print("Invalid dataset...")
@@ -280,7 +286,7 @@ if __name__ == '__main__':
     parser.add_argument('--gamma-rot', type=float, default=0.0)
     parser.add_argument('--gamma-dist', type=float, default=0.0)
     # dataset
-    parser.add_argument('--dataset', default='mini', choices=['mini','tiered','cifarfs','fc100'])
+    parser.add_argument('--dataset', default='mini', choices=['mini','tiered','cifarfs','fc100','blood'])
     parser.add_argument('--size', type=int, default=84)
     parser.add_argument('--worker', type=int, default=8)
     # few-shot
@@ -299,7 +305,7 @@ if __name__ == '__main__':
     
     if args.dataset in ['mini', 'tiered']:
         args.size = 84
-    elif args.dataset in ['cifarfs','fc100']:
+    elif args.dataset in ['cifarfs','fc100','blood']:
         args.size = 32
         args.worker = 0
     # fix random seed
