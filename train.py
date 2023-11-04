@@ -5,12 +5,12 @@ import torch.nn.functional as F
 import datetime
 
 from torch.utils.data import DataLoader
-from datasets.samplers import CategoriesSampler
 from datasets.miniimagenet import SSLMiniImageNet, MiniImageNet
 from datasets.tiered_imagenet import SSLTieredImageNet, TieredImageNet
 from datasets.cifarfs import SSLCifarFS, CIFAR_FS
 from datasets.fc100 import SSLFC100, FC100
 from datasets.blood import Blood, SSLBlood
+from datasets.samplers import CategoriesSampler
 from resnet import resnet12
 from util import str2bool, set_gpu, ensure_path, save_checkpoint, count_acc, seed_torch, Averager, compute_confidence_interval, normalize, Timer
 from sklearn import metrics
