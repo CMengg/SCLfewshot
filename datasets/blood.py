@@ -109,19 +109,19 @@ class SSLBlood(Dataset):
             transforms.RandomVerticalFlip(p=0.5)
         ])
 
-        def __len__(self):
-            return len(self.data)
+    def __len__(self):
+        return len(self.data)
         
-        def __getitem__(self, i):
-            path, label = self.data[i], self.label[i]
-            img = Image.open(path).convert('RGB')
-            img = self.shared_transform(img)
-            image = []
-            for _ in range(1):
-                image.append(self.identity_transform(img).unsqueeze(0))
-            for i in range(3):
-                image.append(self.augmentation_transform(img).unsqueeze(0))
-            return dict(data=torch.cat(image)), label
+    def __getitem__(self, i):
+        path, label = self.data[i], self.label[i]
+        img = Image.open(path).convert('RGB')
+        img = self.shared_transform(img)
+        image = []
+        for _ in range(1):
+            image.append(self.identity_transform(img).unsqueeze(0))
+        for i in range(3):
+            image.append(self.augmentation_transform(img).unsqueeze(0))
+        return dict(data=torch.cat(image)), label
 
 
 
