@@ -287,6 +287,7 @@ if __name__ == '__main__':
     parser.add_argument('--gamma-dist', type=float, default=0.0)
     # dataset
     parser.add_argument('--dataset', default='mini', choices=['mini','tiered','cifarfs','fc100','blood'])
+    parser.add_argument('--data_path', default='/kaggle/input/blood')
     parser.add_argument('--size', type=int, default=84)
     parser.add_argument('--worker', type=int, default=8)
     # few-shot
