@@ -230,8 +230,8 @@ def validation(args, dataloader, model):
     model.eval()
     acc_list = []
 
-    for _, batch in enumerate(dataloader, 1):
-        data, _ = [x.cuda() for x in batch[0]]
+    for batch_idx, batch in enumerate(dataloader):
+        data = batch[0].cuda()
         p = args.shot * args.way
         data_shot, data_query = data[:p], data[p:]
 
