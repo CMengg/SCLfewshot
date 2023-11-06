@@ -306,6 +306,7 @@ if __name__ == '__main__':
     
     if args.dataset in ['mini', 'tiered','blood']:
         args.size = 84
+        args.worker = 4
     elif args.dataset in ['cifarfs','fc100']:
         args.size = 32
         args.worker = 0
