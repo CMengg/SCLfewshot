@@ -34,7 +34,7 @@ def get_dataset(args):
         print("=> FC100...")
     elif args.dataset == 'blood':
         testset = Blood('test', args)
-        n_cls = 3
+        n_cls = 11
         print("=> Blood...")
     else:
         print("Invalid dataset...")
