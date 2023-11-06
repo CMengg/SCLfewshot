@@ -33,7 +33,7 @@ def get_dataset(args):
         n_cls = 60
         print("=> FC100...")
     elif args.dataset == 'blood':
-        testset = Blood('test', args.size)
+        testset = Blood('test', args)
         n_cls = 3
         print("=> Blood...")
     else:
