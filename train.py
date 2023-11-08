@@ -9,7 +9,10 @@ from datasets.miniimagenet import SSLMiniImageNet, MiniImageNet
 from datasets.tiered_imagenet import SSLTieredImageNet, TieredImageNet
 from datasets.cifarfs import SSLCifarFS, CIFAR_FS
 from datasets.fc100 import SSLFC100, FC100
-from datasets.blood import Blood, SSLBlood
+from datasets.blood import SSLBlood, Blood
+from datasets.PapSmear import SSLPapSmear, PapSmear
+# from datasets.breakhis import SSLBreakHis, BreakHis
+# from datasets.isic18 import SSLISIC18, ISIC18
 from datasets.samplers import CategoriesSampler
 from resnet import resnet12
 from util import str2bool, set_gpu, ensure_path, save_checkpoint, count_acc, seed_torch, Averager, compute_confidence_interval, normalize, Timer
@@ -44,6 +47,21 @@ def get_dataset(args):
         valset = Blood('val', args)
         n_cls = 11
         print("=> Blood...")
+    elif args.dataset == 'PapSmear':
+        trainset = SSLPapSmear('train', args)
+        valset = PapSmear('val', args)
+        n_cls = 7
+        print("=> PapSmear...")
+    elif args.dataset == 'BreakHis':
+        trainset = SSLBreakHis('train', args)
+        valset = BreakHis('val', args)
+        n_cls = 8
+        print("=> BreakHis...")
+    elif args.dataset == 'ISIC18':
+        trainset = SSLISIC18('train', args)
+        valset = ISIC18('val', args)
+        n_cls = 7
+        print("=> ISIC18...")
     else:
         print("Invalid dataset...")
         exit()
@@ -67,7 +85,7 @@ def main(args):
     # model
     if args.dataset in ['mini', 'tiered']:
         model = resnet12(avg_pool=True, drop_rate=0.1, dropblock_size=5, num_classes=n_cls).cuda()
-    elif args.dataset in ['cifarfs', 'fc100', 'blood']:
+    elif args.dataset in ['cifarfs', 'fc100', 'blood', 'ISIC18', 'PapSmear', 'BreakHis']:
         model = resnet12(avg_pool=True, drop_rate=0.1, dropblock_size=2, num_classes=n_cls).cuda()
     else:
         print("Invalid dataset...")
@@ -286,7 +304,7 @@ if __name__ == '__main__':
     parser.add_argument('--gamma-rot', type=float, default=0.0)
     parser.add_argument('--gamma-dist', type=float, default=0.0)
     # dataset
-    parser.add_argument('--dataset', default='mini', choices=['mini','tiered','cifarfs','fc100','blood'])
+    parser.add_argument('--dataset', default='mini', choices=['mini','tiered','cifarfs','fc100','blood','ISIC18','BreakHis','PapSmear'])
     parser.add_argument('--data_path', default='/kaggle/input/blood')
     parser.add_argument('--size', type=int, default=84)
     parser.add_argument('--worker', type=int, default=8)
@@ -304,7 +322,7 @@ if __name__ == '__main__':
     for it in iterations:
         args.lr_decay_epochs.append(int(it))
     
-    if args.dataset in ['mini', 'tiered','blood']:
+    if args.dataset in ['mini', 'tiered','blood','ISIC18','BreakHis','PapSmear']:
         args.size = 84
     elif args.dataset in ['cifarfs','fc100']:
         args.size = 32
