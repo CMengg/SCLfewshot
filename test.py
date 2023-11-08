@@ -10,6 +10,9 @@ from datasets.tiered_imagenet import TieredImageNet
 from datasets.cifarfs import CIFAR_FS
 from datasets.fc100 import FC100
 from datasets.blood import Blood
+# from datasets.breakhis import BreakHis
+# from datasets.isic18 import ISIC18
+from datasets.PapSmear import PapSmear
 from resnet import resnet12
 from util import str2bool, set_gpu, seed_torch, compute_confidence_interval, normalize
 from sklearn import metrics
@@ -36,6 +39,18 @@ def get_dataset(args):
         testset = Blood('test', args)
         n_cls = 11
         print("=> Blood...")
+    elif args.dataset == 'PapSmear':
+        testset = PapSmear('test', args)
+        n_cls = 7
+        print("=> PapSmear...")
+    elif args.dataset == 'BreakHis':
+        testset = BreakHis('test', args)
+        n_cls = 8
+        print("=> BreakHis...")
+    elif args.dataset == 'ISIC18':
+        testset = ISIC18('test', args)
+        n_cls = 7
+        print("=> ISIC18...")
     else:
         print("Invalid dataset...")
         exit()
@@ -52,7 +67,7 @@ def main(args):
 
     if args.dataset in ['mini', 'tiered']:
         model = resnet12(avg_pool=True, drop_rate=0.1, dropblock_size=5, num_classes=n_cls).cuda()
-    elif args.dataset in ['cifarfs', 'fc100', 'blood']:
+    elif args.dataset in ['cifarfs', 'fc100', 'blood', 'ISIC18', 'PapSmear', 'BreakHis']:
         model = resnet12(avg_pool=True, drop_rate=0.1, dropblock_size=2, num_classes=n_cls).cuda()
     else:
         print("Invalid dataset...")
@@ -115,20 +130,20 @@ if __name__ == '__main__':
     parser.add_argument('--gpu', default='0')
     parser.add_argument('--seed', type=int, default=1)
     # dataset
-    parser.add_argument('--dataset', default='mini', choices=['mini','tiered','cifarfs','fc100','blood'])
+    parser.add_argument('--dataset', default='mini', choices=['mini','tiered','cifarfs','fc100','blood', 'ISIC18', 'PapSmear', 'BreakHis'])
     parser.add_argument('--data_path', default='/kaggle/input/blood-fs')
     parser.add_argument('--size', type=int, default=84)
     parser.add_argument('--worker', type=int, default=8)
     # few-shot
-    parser.add_argument('--way', type=int, default=5)
-    parser.add_argument('--shot', type=int, default=1)
+    parser.add_argument('--way', type=int, default=2)
+    parser.add_argument('--shot', type=int, default=3)
     parser.add_argument('--query', type=int, default=15)
     parser.add_argument('--test-batch', type=int, default=2000)
     parser.add_argument('--norm', type=str2bool, nargs='?', default=True)
     parser.add_argument('--is-feat', type=str2bool, nargs='?', default=True)
     args = parser.parse_args()
     
-    if args.dataset in ['mini', 'tiered', 'blood']:
+    if args.dataset in ['mini', 'tiered', 'blood', 'ISIC18', 'PapSmear', 'BreakHis']:
         args.size = 84
     elif args.dataset in ['cifarfs','fc100']:
         args.size = 32
